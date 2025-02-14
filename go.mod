@@ -1,6 +1,6 @@
 module github.com/essentialkaos/updown
 
-go 1.22.8
+go 1.22.11
 
 require (
 	github.com/essentialkaos/check v1.4.1
