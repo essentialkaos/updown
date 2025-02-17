@@ -480,6 +480,17 @@ func (c *Client) SetUserAgent(app, version string) {
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
+// Link returns URL of check info page
+func (c *Check) Link() string {
+	if c == nil {
+		return "https://updown.io"
+	}
+
+	return "https://updown.io/" + c.Token
+}
+
+// ////////////////////////////////////////////////////////////////////////////////// //
+
 // GetChecks returns info about all checks
 //
 // https://updown.io/api#GET-/api/checks
