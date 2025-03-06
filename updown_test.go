@@ -581,6 +581,7 @@ func (s *UpdownSuite) TestGetChecks(c *C) {
 	chk := checks[0]
 
 	c.Assert(chk.Token, Equals, "ngg8")
+	c.Assert(chk.Alias, Equals, "Updown")
 	c.Assert(chk.URL, Equals, "https://updown.io")
 	c.Assert(chk.LastStatus, Equals, 200)
 	c.Assert(chk.Uptime, Equals, 100.0)
@@ -609,6 +610,11 @@ func (s *UpdownSuite) TestGetChecks(c *C) {
 	c.Assert(chk.SSL.Error, Equals, "")
 
 	c.Assert(api.Calls(), Equals, uint(1))
+
+	c.Assert(checks.Get(""), IsNil)
+	c.Assert(checks.Get("abcd"), IsNil)
+	c.Assert(checks.Get("ngg8"), NotNil)
+	c.Assert(checks.Get("Updown"), NotNil)
 }
 
 func (s *UpdownSuite) TestGetCheck(c *C) {
@@ -841,7 +847,7 @@ func checksHandler(rw http.ResponseWriter, r *http.Request) {
   {
     "token": "ngg8",
     "url": "https://updown.io",
-    "alias": "",
+    "alias": "Updown",
     "last_status": 200,
     "uptime": 100,
     "down": false,

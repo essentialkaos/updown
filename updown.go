@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/essentialkaos/ek/v13/req"
@@ -489,6 +490,24 @@ func (c *Check) Link() string {
 	return "https://updown.io/" + c.Token
 }
 
+// Get returns check with given token or alias
+func (c Checks) Get(tokenOrAlias string) *Check {
+	if tokenOrAlias == "" {
+		return nil
+	}
+
+	tokenOrAlias = strings.ToLower(tokenOrAlias)
+
+	for _, cc := range c {
+		if strings.ToLower(cc.Token) == tokenOrAlias ||
+			(cc.Alias != "" && strings.ToLower(cc.Alias) == tokenOrAlias) {
+			return cc
+		}
+	}
+
+	return nil
+}
+
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // GetChecks returns info about all checks
@@ -788,7 +807,7 @@ func (o MetricsOptions) toQuery() req.Query {
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // sendRequest sends request to API
-func (c *Client) sendRequest(method, endpoint string, response, payload any, query req.Query) error {
+func (c *Client) sendRequest(method, endpoint string, response, _ any, query req.Query) error {
 	c.calls++
 
 	r := req.Request{
