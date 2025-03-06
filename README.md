@@ -15,6 +15,9 @@
 
 `updown` is a Go package for working with the [updown.io](https://updown.io) [public API](https://updown.io/api).
 
+> [!NOTE]
+> **Please note that this package only supports retrieving data from the API (_i.e. you cannot create or modify checks with this package_).**
+
 ### CI Status
 
 | Branch | Status |
