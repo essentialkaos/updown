@@ -378,9 +378,10 @@ type Client struct {
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 var (
-	ErrEmptyAPIKey = errors.New("API key is empty")
-	ErrNilClient   = errors.New("Client is nil")
-	ErrEmptyToken  = errors.New("Token is empty")
+	ErrEmptyAPIKey   = errors.New("API key is empty")
+	ErrNilClient     = errors.New("Client is nil")
+	ErrEmptyToken    = errors.New("Token is empty")
+	ErrEmptyPulseURL = errors.New("Pulse URL is empty")
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -453,6 +454,33 @@ func NewClient(apiKey string) (*Client, error) {
 	c.SetUserAgent("", "")
 
 	return c, nil
+}
+
+// SendPulse sends "pulse" request to updown and returns request UUID
+//
+// https://updown.io/doc/how-pulse-cron-monitoring-works
+func SendPulse(url, payload string) (string, error) {
+	if url == "" {
+		return "", ErrEmptyPulseURL
+	}
+
+	rr := req.NewRetrier()
+	r := req.Request{URL: url}
+
+	if payload != "" {
+		r.Method = req.POST
+		r.Body = payload
+	}
+
+	resp, err := rr.Do(r, req.Retry{Num: 5, Pause: time.Second / 4, Status: 200})
+
+	if err != nil {
+		return "", fmt.Errorf("Can't send pulse request: %v", err)
+	}
+
+	_, uuid, _ := strings.Cut(resp.String(), " ")
+
+	return uuid, nil
 }
 
 // ////////////////////////////////////////////////////////////////////////////////// //

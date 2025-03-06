@@ -1,7 +1,8 @@
 ## Changelog
 
-### [0.0.3](https://kaos.sh/updown/0.0.3)
+### [0.1.0](https://kaos.sh/updown/0.1.0)
 
+- Added method `SendPulse` for sending [pulse requests](https://updown.io/doc/how-pulse-cron-monitoring-works)
 - Added helper `Checks.Get`
 - Code refactoring
 
