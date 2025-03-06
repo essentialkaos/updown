@@ -37,16 +37,19 @@ func (s *UpdownSuite) SetUpSuite(c *C) {
 	mux := http.NewServeMux()
 	server := &http.Server{Addr: ":" + TEST_PORT, Handler: mux}
 
-	mux.HandleFunc("GET /checks", checksHandler)
-	mux.HandleFunc("GET /checks/ngg8", checkHandler)
-	mux.HandleFunc("GET /checks/ngg8/downtimes", downtimesHandler)
-	mux.HandleFunc("GET /checks/ngg8/metrics", metricsHandler)
-	mux.HandleFunc("GET /nodes", nodesHandler)
-	mux.HandleFunc("GET /nodes/ips", ipsHandler)
-	mux.HandleFunc("GET /nodes/ipv4", ipV4Handler)
-	mux.HandleFunc("GET /nodes/ipv6", ipV6Handler)
-	mux.HandleFunc("GET /recipients", recipientsHandler)
-	mux.HandleFunc("GET /status-pages", statusPagesHandler)
+	mux.HandleFunc("GET /checks", handlerChecks)
+	mux.HandleFunc("GET /checks/ngg8", handlerCheck)
+	mux.HandleFunc("GET /checks/ngg8/downtimes", handlerDowntimes)
+	mux.HandleFunc("GET /checks/ngg8/metrics", handlerMetrics)
+	mux.HandleFunc("GET /nodes", handlerNodes)
+	mux.HandleFunc("GET /nodes/ips", handlerIps)
+	mux.HandleFunc("GET /nodes/ipv4", handlerIpV4)
+	mux.HandleFunc("GET /nodes/ipv6", handlerIpV6)
+	mux.HandleFunc("GET /recipients", handlerRecipients)
+	mux.HandleFunc("GET /status-pages", handlerStatusPages)
+
+	mux.HandleFunc("POST /pulse", handlerPulse)
+	mux.HandleFunc("POST /pulse-error", handlerPulseError)
 
 	go server.ListenAndServe()
 
@@ -581,6 +584,7 @@ func (s *UpdownSuite) TestGetChecks(c *C) {
 	chk := checks[0]
 
 	c.Assert(chk.Token, Equals, "ngg8")
+	c.Assert(chk.Alias, Equals, "Updown")
 	c.Assert(chk.URL, Equals, "https://updown.io")
 	c.Assert(chk.LastStatus, Equals, 200)
 	c.Assert(chk.Uptime, Equals, 100.0)
@@ -609,6 +613,11 @@ func (s *UpdownSuite) TestGetChecks(c *C) {
 	c.Assert(chk.SSL.Error, Equals, "")
 
 	c.Assert(api.Calls(), Equals, uint(1))
+
+	c.Assert(checks.Get(""), IsNil)
+	c.Assert(checks.Get("abcd"), IsNil)
+	c.Assert(checks.Get("ngg8"), NotNil)
+	c.Assert(checks.Get("Updown"), NotNil)
 }
 
 func (s *UpdownSuite) TestGetCheck(c *C) {
@@ -824,7 +833,25 @@ func (s *UpdownSuite) TestGetStatusPages(c *C) {
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
-func checksHandler(rw http.ResponseWriter, r *http.Request) {
+func (s *UpdownSuite) TestPulse(c *C) {
+	_, err := SendPulse("", "TEST-DATA")
+
+	c.Assert(err, Equals, ErrEmptyPulseURL)
+
+	uuid, err := SendPulse("http://127.0.0.1:"+TEST_PORT+"/pulse", "TEST-DATA")
+
+	c.Assert(err, IsNil)
+	c.Assert(uuid, Equals, "ac0607d2-3138-401f-8229-6ca473d03472")
+
+	uuid, err = SendPulse("http://127.0.0.1:"+TEST_PORT+"/pulse-error", "TEST-DATA")
+
+	c.Assert(err, NotNil)
+	c.Assert(uuid, Equals, "")
+}
+
+// ////////////////////////////////////////////////////////////////////////////////// //
+
+func handlerChecks(rw http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("X-API-Key") == "http-error" {
 		rw.WriteHeader(503)
 		return
@@ -841,7 +868,7 @@ func checksHandler(rw http.ResponseWriter, r *http.Request) {
   {
     "token": "ngg8",
     "url": "https://updown.io",
-    "alias": "",
+    "alias": "Updown",
     "last_status": 200,
     "uptime": 100,
     "down": false,
@@ -873,7 +900,7 @@ func checksHandler(rw http.ResponseWriter, r *http.Request) {
 ]`))
 }
 
-func checkHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerCheck(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -913,7 +940,7 @@ func checkHandler(rw http.ResponseWriter, r *http.Request) {
 }`))
 }
 
-func downtimesHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerDowntimes(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -941,7 +968,7 @@ func downtimesHandler(rw http.ResponseWriter, r *http.Request) {
 ]`))
 }
 
-func metricsHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerMetrics(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -975,7 +1002,7 @@ func metricsHandler(rw http.ResponseWriter, r *http.Request) {
 }`))
 }
 
-func nodesHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerNodes(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -1075,7 +1102,7 @@ func nodesHandler(rw http.ResponseWriter, r *http.Request) {
 }`))
 }
 
-func ipsHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerIps(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -1105,7 +1132,7 @@ func ipsHandler(rw http.ResponseWriter, r *http.Request) {
 ]`))
 }
 
-func ipV4Handler(rw http.ResponseWriter, r *http.Request) {
+func handlerIpV4(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -1125,7 +1152,7 @@ func ipV4Handler(rw http.ResponseWriter, r *http.Request) {
 ]`))
 }
 
-func ipV6Handler(rw http.ResponseWriter, r *http.Request) {
+func handlerIpV6(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -1145,7 +1172,7 @@ func ipV6Handler(rw http.ResponseWriter, r *http.Request) {
 ]`))
 }
 
-func recipientsHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerRecipients(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -1188,7 +1215,7 @@ func recipientsHandler(rw http.ResponseWriter, r *http.Request) {
 ]`))
 }
 
-func statusPagesHandler(rw http.ResponseWriter, r *http.Request) {
+func handlerStatusPages(rw http.ResponseWriter, r *http.Request) {
 	if writeErrorResponse(rw, r) {
 		return
 	}
@@ -1205,6 +1232,15 @@ func statusPagesHandler(rw http.ResponseWriter, r *http.Request) {
     "checks": ["ngg8", "dmbe", "9e75", "l7ua", "6xjq", "wxax", "afha", "5yfe", "4osx", "1mjm", "sh6n", "5njh", "b1uc"]
   }
 ]`))
+}
+
+func handlerPulse(rw http.ResponseWriter, r *http.Request) {
+	rw.WriteHeader(200)
+	rw.Write([]byte(`OK: ac0607d2-3138-401f-8229-6ca473d03472`))
+}
+
+func handlerPulseError(rw http.ResponseWriter, r *http.Request) {
+	rw.WriteHeader(404)
 }
 
 func writeErrorResponse(rw http.ResponseWriter, r *http.Request) bool {
