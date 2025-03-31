@@ -817,17 +817,9 @@ func (o MetricsOptions) toQuery() req.Query {
 
 	query := req.Query{}
 
-	if o.GroupBy != "" {
-		query["group"] = o.GroupBy
-	}
-
-	if !o.From.IsZero() {
-		query["from"] = o.From.Format("2006-01-02T15:04:05-07:00") // ISO8601
-	}
-
-	if !o.From.IsZero() {
-		query["to"] = o.To.Format("2006-01-02T15:04:05-07:00") // ISO8601
-	}
+	query.SetIf(o.GroupBy != "", "group", o.GroupBy)
+	query.SetIf(!o.From.IsZero(), "from", o.From.Format("2006-01-02T15:04:05-07:00")) // ISO8601
+	query.SetIf(!o.From.IsZero(), "to", o.To.Format("2006-01-02T15:04:05-07:00"))     // ISO8601
 
 	return query
 }
