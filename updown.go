@@ -30,6 +30,11 @@ const (
 	EVENT_PERFORMANCE_DROP = "check.performance_drop"
 )
 
+const (
+	SOURCE_WHOIS = "WHOIS"
+	SOURCE_RDAP  = "RDAP"
+)
+
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // Date is JSON date
@@ -149,6 +154,7 @@ type Check struct {
 	CustomHeaders     map[string]string `json:"custom_headers"`
 	SSL               *SSLStatus        `json:"ssl,omitempty"`
 	Metrics           *Metrics          `json:"metrics,omitempty"`
+	Domain            *Domain           `json:"domain"`
 }
 
 // Checks is a slice with checks
@@ -236,6 +242,14 @@ type Metrics struct {
 	Apdex    float64       `json:"apdex"`
 	Timings  *TimingStats  `json:"timings"`
 	Requests *RequestStats `json:"requests"`
+}
+
+// Domain contains info about domain
+type Domain struct {
+	TestedAt      Date   `json:"tested_at"`
+	ExpiresAt     Date   `json:"expires_at"`
+	RemainingDays int    `json:"remaining_days"`
+	Source        string `json:"source"`
 }
 
 // Timings check timings info

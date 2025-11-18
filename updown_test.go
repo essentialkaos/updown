@@ -611,6 +611,10 @@ func (s *UpdownSuite) TestGetChecks(c *C) {
 	c.Assert(chk.SSL.ExpiresAt.Unix(), Equals, int64(1645459056))
 	c.Assert(chk.SSL.IsValid, Equals, true)
 	c.Assert(chk.SSL.Error, Equals, "")
+	c.Assert(chk.Domain.TestedAt.Unix(), Equals, int64(1639742400))
+	c.Assert(chk.Domain.ExpiresAt.Unix(), Equals, int64(1705363199))
+	c.Assert(chk.Domain.RemainingDays, Equals, 758)
+	c.Assert(chk.Domain.Source, Equals, "RDAP")
 
 	c.Assert(api.Calls(), Equals, uint(1))
 
@@ -658,6 +662,10 @@ func (s *UpdownSuite) TestGetCheck(c *C) {
 	c.Assert(chk.SSL.ExpiresAt.Unix(), Equals, int64(1645459056))
 	c.Assert(chk.SSL.IsValid, Equals, true)
 	c.Assert(chk.SSL.Error, Equals, "")
+	c.Assert(chk.Domain.TestedAt.Unix(), Equals, int64(1639742400))
+	c.Assert(chk.Domain.ExpiresAt.Unix(), Equals, int64(1705363199))
+	c.Assert(chk.Domain.RemainingDays, Equals, 758)
+	c.Assert(chk.Domain.Source, Equals, "WHOIS")
 	c.Assert(chk.Link(), Equals, "https://updown.io/ngg8")
 }
 
@@ -895,6 +903,12 @@ func handlerChecks(rw http.ResponseWriter, r *http.Request) {
       "expires_at": "2022-02-21T15:57:36Z",
       "valid": true,
       "error": null
+    },
+    "domain": {
+      "tested_at": "2021-12-17T12:00:00Z",
+      "expires_at": "2024-01-15T23:59:59Z",
+      "remaining_days": 758,
+      "source": "RDAP"
     }
   }
 ]`))
@@ -936,6 +950,12 @@ func handlerCheck(rw http.ResponseWriter, r *http.Request) {
     "expires_at": "2022-02-21T15:57:36Z",
     "valid": true,
     "error": null
+  },
+  "domain": {
+    "tested_at": "2021-12-17T12:00:00Z",
+    "expires_at": "2024-01-15T23:59:59Z",
+    "remaining_days": 758,
+    "source": "WHOIS"
   }
 }`))
 }
