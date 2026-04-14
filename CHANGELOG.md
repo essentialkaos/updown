@@ -1,5 +1,9 @@
 ## Changelog
 
+### [0.3.0](https://kaos.sh/updown/0.3.0)
+
+- Migrated to `ek.v14`
+
 ### [0.2.0](https://kaos.sh/updown/0.2.0)
 
 - Added domain expiration info to `Check`
