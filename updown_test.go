@@ -531,43 +531,43 @@ func (s *UpdownSuite) TestAPIDataErrors(c *C) {
 
 	_, err = api.GetChecks()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetCheck("ngg8", false)
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetDowntimes("ngg8", false)
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetMetrics("ngg8", MetricsOptions{})
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetNodes()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetNodesIPs()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetNodesIPsV4()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetNodesIPsV6()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetRecipients()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 
 	_, err = api.GetStatusPages()
 	c.Assert(err, NotNil)
-	c.Assert(err, ErrorMatches, "Can't decode API response: invalid character 'F' looking for beginning of value")
+	c.Assert(err, ErrorMatches, "can't decode API response: invalid character 'F' looking for beginning of value")
 }
 
 func (s *UpdownSuite) TestGetChecks(c *C) {

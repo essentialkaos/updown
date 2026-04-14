@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/essentialkaos/ek/v13/req"
+	"github.com/essentialkaos/ek/v14/req"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -393,9 +393,9 @@ type Client struct {
 
 var (
 	ErrEmptyAPIKey   = errors.New("API key is empty")
-	ErrNilClient     = errors.New("Client is nil")
-	ErrEmptyToken    = errors.New("Token is empty")
-	ErrEmptyPulseURL = errors.New("Pulse URL is empty")
+	ErrNilClient     = errors.New("client is nil")
+	ErrEmptyToken    = errors.New("token is empty")
+	ErrEmptyPulseURL = errors.New("pulse URL is empty")
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -489,7 +489,7 @@ func SendPulse(url, payload string) (string, error) {
 	resp, err := rr.Do(r, req.Retry{Num: 5, Pause: time.Second / 4, Status: 200})
 
 	if err != nil {
-		return "", fmt.Errorf("Can't send pulse request: %v", err)
+		return "", fmt.Errorf("can't send pulse request: %v", err)
 	}
 
 	_, uuid, _ := strings.Cut(resp.String(), " ")
@@ -856,7 +856,7 @@ func (c *Client) sendRequest(method, endpoint string, response, _ any, query req
 	resp, err := c.engine.Do(r)
 
 	if err != nil {
-		return fmt.Errorf("Can't send request to API: %w", err)
+		return fmt.Errorf("can't send request to API: %w", err)
 	}
 
 	if resp.StatusCode != req.STATUS_OK {
@@ -867,7 +867,7 @@ func (c *Client) sendRequest(method, endpoint string, response, _ any, query req
 		err = resp.JSON(response)
 
 		if err != nil {
-			return fmt.Errorf("Can't decode API response: %w", err)
+			return fmt.Errorf("can't decode API response: %w", err)
 		}
 	}
 
