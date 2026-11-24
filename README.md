@@ -2,10 +2,10 @@
 
 <p align="center">
   <a href="https://kaos.sh/g/updown"><img src=".github/images/godoc.svg"/></a>
-  <a href="https://kaos.sh/y/updown"><img src="https://kaos.sh/y/4f16987e540642958b345e5d8f4b5b1b.svg" alt="Codacy badge" /></a>
-  <a href="https://kaos.sh/c/updown"><img src="https://kaos.sh/c/updown.svg" alt="Coverage Status" /></a>
-  <a href="https://kaos.sh/w/updown/ci"><img src="https://kaos.sh/w/updown/ci.svg" alt="GitHub Actions CI Status" /></a>
-  <a href="https://kaos.sh/w/updown/codeql"><img src="https://kaos.sh/w/updown/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
+  <a href="https://kaos.sh/y/updown"><img src="https://app.codacy.com/project/badge/Grade/4f16987e540642958b345e5d8f4b5b1b" alt="Codacy badge" /></a>
+  <a href="https://kaos.sh/c/updown"><img src="https://coveralls.io/repos/github/essentialkaos/updown/badge.svg" alt="Coverage Status" /></a>
+  <a href="https://kaos.sh/w/updown/ci"><img src="https://github.com/essentialkaos/updown/actions/workflows/ci.yml/badge.svg" alt="GitHub Actions CI Status" /></a>
+  <a href="https://kaos.sh/w/updown/codeql"><img src="https://github.com/essentialkaos/updown/actions/workflows/codeql.yml/badge.svg" alt="GitHub Actions CodeQL Status" /></a>
   <a href="#license"><img src=".github/images/license.svg"/></a>
 </p>
 
@@ -22,8 +22,8 @@
 
 | Branch | Status |
 |--------|----------|
-| `master` | [![CI](https://kaos.sh/w/updown/ci.svg?branch=master)](https://kaos.sh/w/updown/ci?query=branch:master) |
-| `develop` | [![CI](https://kaos.sh/w/updown/ci.svg?branch=develop)](https://kaos.sh/w/updown/ci?query=branch:develop) |
+| `master` | [![CI](https://github.com/essentialkaos/updown/actions/workflows/ci.yml/badge.svg?branch=master)](https://kaos.sh/w/updown/ci?query=branch:master) |
+| `develop` | [![CI](https://github.com/essentialkaos/updown/actions/workflows/ci.yml/badge.svg?branch=develop)](https://kaos.sh/w/updown/ci?query=branch:develop) |
 
 ### Contributing
 
